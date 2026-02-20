@@ -4,7 +4,6 @@
 #include <memory>
 #include <exception>
 
-
 template<typename T, typename Func>
 class my_promise {
 public:
