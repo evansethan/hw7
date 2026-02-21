@@ -8,9 +8,9 @@
 template<typename Func, typename ...Args>
 auto my_async(Func f, Args... args) {
 
-    std::packaged_task<decltype(f(args...))()> pt(f);
+    std::packaged_task<decltype(f(args...))()> pt([=]{ return f(args...); });
     auto result = pt.get_future();
-    std::thread td(std::move(pt), args...);
+    std::thread td(std::move(pt));
     td.detach();
     return result;
 
