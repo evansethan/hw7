@@ -16,4 +16,3 @@ auto my_async(Func f, Args... args) {
 
 }
 #endif
-
