@@ -3,19 +3,27 @@
 
 #include <memory>
 #include <exception>
+#include <mutex>
+#include <condition_variable>
+#include "SharedState.h"
 
-struct shared_state {
-    std::shared_ptr sptr;
-    std::exception_ptr eptr;
-};
-
-
-template<typename T, typename Func>
+template<typename T>
 class my_future {
 public:
-    shared_state sstate;
+    std::shared_ptr<shared_state<T>> sptr;
 
-    my_future() : x(x) {};
+    my_future(std::shared_ptr<shared_state<T>> sp) {
+        sptr = sp;
+    };
+
+    T get() {
+        std::unique_lock lock(sptr->mtx);
+        sptr->cv.wait(lock, [&]{ return sptr->ready; });
+        if (sptr->eptr != nullptr) {
+            std::rethrow_exception(sptr->eptr);
+        }
+        return sptr->val;
+    }
 
 };
 
