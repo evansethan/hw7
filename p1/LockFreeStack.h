@@ -49,7 +49,6 @@ Stack::push(int val)
     }
 }
 
-
 // Pop value off list
 int
 Stack::pop()

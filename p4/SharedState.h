@@ -20,6 +20,4 @@ struct shared_state {
     }
 };
 
-
-
 #endif
